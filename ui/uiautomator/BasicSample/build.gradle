@@ -8,7 +8,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
@@ -27,5 +27,5 @@ ext {
     runnerVersion = "1.0.0"
     rulesVersion = "1.0.0"
     espressoVersion = "3.0.0"
-    uiautomatorVersion = "2.3.2"
+    uiautomatorVersion = "2.1.3"
 }
