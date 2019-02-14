@@ -1,4 +1,5 @@
 load("@gmaven_rules//:defs.bzl", "gmaven_artifact")
+load("//:common_defs.bzl", "androidxLibVersion", "minSdkVersion", "targetSdkVersion")
 
 licenses(["notice"])  # Apache 2.0
 
@@ -9,7 +10,7 @@ android_library(
     manifest = "app/src/main/AndroidManifest.xml",
     resource_files = glob(["app/src/main/res/**/*"]),
     deps = [
-        gmaven_artifact("com.android.support:support-annotations:27.0.2"),
+        gmaven_artifact("androidx.annotation:annotation:" + androidxLibVersion),
         "@com_google_guava_guava//jar",
     ],
 )
@@ -18,13 +19,17 @@ android_binary(
     name = "CustomMatcherSample",
     custom_package = "com.example.android.testing.espresso.CustomMatcherSample",
     manifest = "app/src/main/AppManifest.xml",
+    manifest_values = {
+        "minSdkVersion": minSdkVersion,
+        "targetSdkVersion": targetSdkVersion,
+    },
     deps = [":CustomMatcherSampleLib"],
 )
 
 android_library(
     name = "CustomMatcherSampleTestLib",
     srcs = glob(["app/src/androidTest/**/*.java"]),
-    custom_package = "com.example.android.testing.espresso.CustomMatcherSample",
+    custom_package = "com.example.android.testing.espresso.CustomMatcherSample.test",
     deps = [
         ":CustomMatcherSampleLib",
         "//:test_deps",
@@ -33,9 +38,13 @@ android_library(
 
 android_binary(
     name = "CustomMatcherSampleTest",
-    custom_package = "com.example.android.testing.espresso.CustomMatcherSample",
+    custom_package = "com.example.android.testing.espresso.CustomMatcherSample.test",
     instruments = ":CustomMatcherSample",
     manifest = "app/src/androidTest/AndroidManifest.xml",
+    manifest_values = {
+        "minSdkVersion": minSdkVersion,
+        "targetSdkVersion": targetSdkVersion,
+    },
     deps = [":CustomMatcherSampleTestLib"],
 )
 

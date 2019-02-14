@@ -1,5 +1,7 @@
 licenses(["notice"])  # Apache 2.0
 
+load("//:common_defs.bzl", "minSdkVersion", "targetSdkVersion")
+
 android_library(
     name = "BasicSampleLib",
     srcs = glob(["app/src/main/**/*.java"]),
@@ -9,10 +11,21 @@ android_library(
     deps = ["@com_google_guava_guava//jar"],
 )
 
+android_binary(
+    name = "BasicSample",
+    custom_package = "com.example.android.testing.espresso.BasicSample",
+    manifest = "app/src/main/AppManifest.xml",
+    manifest_values = {
+        "minSdkVersion": minSdkVersion,
+        "targetSdkVersion": targetSdkVersion,
+    },
+    deps = [":BasicSampleLib"],
+)
+
 android_library(
     name = "BasicSampleTestLib",
     srcs = glob(["app/src/androidTest/**/*.java"]),
-    custom_package = "com.example.android.testing.espresso.BasicSample",
+    custom_package = "com.example.android.testing.espresso.BasicSample.test",
     deps = [
         ":BasicSampleLib",
         "//:test_deps",
@@ -20,17 +33,14 @@ android_library(
 )
 
 android_binary(
-    name = "BasicSample",
-    custom_package = "com.example.android.testing.espresso.BasicSample",
-    manifest = "app/src/main/AppManifest.xml",
-    deps = [":BasicSampleLib"],
-)
-
-android_binary(
     name = "BasicSampleTest",
-    custom_package = "com.example.android.testing.espresso.BasicSample",
+    custom_package = "com.example.android.testing.espresso.BasicSample.test",
     instruments = ":BasicSample",
     manifest = "app/src/androidTest/AndroidManifest.xml",
+    manifest_values = {
+        "minSdkVersion": minSdkVersion,
+        "targetSdkVersion": targetSdkVersion,
+    },
     deps = [":BasicSampleTestLib"],
 )
 
